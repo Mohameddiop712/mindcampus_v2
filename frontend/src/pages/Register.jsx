@@ -14,7 +14,13 @@ export default function Register() {
   const [errors, setErrors] = useState({})
 
   // Validation email
-  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  const ALLOWED_DOMAINS = ['gmail.com', 'ucad.edu.sn', 'esp.sn']
+  const isValidEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!regex.test(email)) return false
+    const domain = email.split('@')[1]?.toLowerCase()
+    return ALLOWED_DOMAINS.includes(domain)
+  }
 
   // Validation en temps réel
   const validate = () => {
@@ -22,7 +28,7 @@ export default function Register() {
     if (!form.prenom.trim()) e.prenom = 'Prénom requis'
     if (!form.nom.trim()) e.nom = 'Nom requis'
     if (!form.email.trim()) e.email = 'Email requis'
-    else if (!isValidEmail(form.email)) e.email = 'Format email invalide (ex: nom@domaine.com)'
+    else if (!isValidEmail(form.email)) e.email = 'Utilisez un email @gmail.com, @ucad.edu.sn ou @esp.sn'
     if (!form.motDePasse) e.motDePasse = 'Mot de passe requis'
     else if (form.motDePasse.length < 6) e.motDePasse = 'Minimum 6 caractères'
     if (!form.confirmMotDePasse) e.confirmMotDePasse = 'Confirmez votre mot de passe'
