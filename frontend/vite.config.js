@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': { target: 'http://localhost:5000', changeOrigin: true }
+      '/api': { target: 'https://mindcampus-v2.onrender.com', changeOrigin: true }
     }
   }
 })
