@@ -12,6 +12,8 @@ import DemandesAide from './pages/DemandesAide'
 import Chat from './pages/Chat'
 import RendezVous from './pages/RendezVous'
 import PairDashboard from './pages/PairDashboard'
+import AdminDashboard from './pages/AdminDashboard'
+import Ressources from './pages/Ressources'
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth()
@@ -26,6 +28,14 @@ const PrivateRoute = ({ children }) => {
   return user ? children : <Navigate to="/login" />
 }
 
+const AdminRoute = ({ children }) => {
+  const { user, loading } = useAuth()
+  if (loading) return null
+  if (!user) return <Navigate to="/login" />
+  if (user.role !== 'admin') return <Navigate to="/" />
+  return children
+}
+
 function AppRoutes() {
   const { user } = useAuth()
   return (
@@ -33,6 +43,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
+        <Route path="/ressources" element={<Ressources />} />
         <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
           <Route index element={<Dashboard />} />
           <Route path="humeur" element={<Humeur />} />
@@ -41,11 +52,10 @@ function AppRoutes() {
           <Route path="chat/:demandeId" element={<Chat />} />
           <Route path="rendezvous" element={<RendezVous />} />
           <Route path="pair-dashboard" element={<PairDashboard />} />
+          <Route path="admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-
-      {/* AI Widget — visible sur toutes les pages connectées */}
       <AIWidget />
     </>
   )

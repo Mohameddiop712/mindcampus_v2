@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { Brain, LayoutDashboard, Heart, Lightbulb, MessageCircle, Calendar, LogOut, Users, Menu, X } from 'lucide-react'
+import { Brain, LayoutDashboard, Heart, Lightbulb, MessageCircle, Calendar, LogOut, Users, Menu, BookOpen, Shield } from 'lucide-react'
 
 export default function Layout() {
   const { user, logout } = useAuth()
@@ -9,32 +9,49 @@ export default function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const handleLogout = () => { logout(); navigate('/login') }
 
-  const nav = user?.role === 'etudiant' ? [
+  const etudiantNav = [
     { to:'/', icon:LayoutDashboard, label:'Dashboard' },
     { to:'/humeur', icon:Heart, label:'Mon Humeur' },
     { to:'/recommandations', icon:Lightbulb, label:'Recommandations' },
     { to:'/demandes', icon:MessageCircle, label:"Demande d'aide" },
     { to:'/rendezvous', icon:Calendar, label:'Rendez-vous' },
-  ] : [
+    { to:'/ressources', icon:BookOpen, label:'Ressources' },
+  ]
+  const aidantNav = [
     { to:'/', icon:LayoutDashboard, label:'Dashboard' },
     { to:'/pair-dashboard', icon:Users, label:'Demandes' },
     { to:'/rendezvous', icon:Calendar, label:'Rendez-vous' },
+    { to:'/ressources', icon:BookOpen, label:'Ressources' },
   ]
+  const adminNav = [
+    { to:'/', icon:LayoutDashboard, label:'Dashboard' },
+    { to:'/admin', icon:Shield, label:'Administration' },
+    { to:'/ressources', icon:BookOpen, label:'Ressources' },
+  ]
+
+  const nav = user?.role === 'admin' ? adminNav
+    : user?.role === 'etudiant' ? etudiantNav
+    : aidantNav
 
   const NavContent = () => (
     <>
+      {/* Logo */}
       <div className="px-5 py-5 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg shrink-0" style={{background:'linear-gradient(135deg,#6366f1,#8b5cf6)'}}>
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg shrink-0"
+            style={{background:'linear-gradient(135deg,#6366f1,#8b5cf6)'}}>
             <Brain className="w-5 h-5 text-white" />
           </div>
           <div>
             <p className="text-white font-bold text-sm leading-none">MindCampus</p>
-            <p className="text-indigo-300 text-[10px] mt-0.5">Soutien étudiant</p>
+            <p className="text-indigo-300 text-[10px] mt-0.5">
+              {user?.role === 'admin' ? 'Administration' : 'Soutien étudiant'}
+            </p>
           </div>
         </div>
       </div>
 
+      {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
         <p className="text-indigo-400 text-[10px] font-bold uppercase tracking-widest px-3 mb-3">Navigation</p>
         {nav.map(({ to, icon:Icon, label }) => (
@@ -55,9 +72,11 @@ export default function Layout() {
         ))}
       </nav>
 
+      {/* User */}
       <div className="p-3 border-t border-white/10">
         <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl" style={{background:'rgba(255,255,255,0.06)'}}>
-          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold text-white shrink-0" style={{background:'linear-gradient(135deg,#6366f1,#8b5cf6)'}}>
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-bold text-white shrink-0"
+            style={{background:'linear-gradient(135deg,#6366f1,#8b5cf6)'}}>
             {user?.prenom?.[0]}{user?.nom?.[0]}
           </div>
           <div className="flex-1 min-w-0">
@@ -75,7 +94,8 @@ export default function Layout() {
   return (
     <div className="flex min-h-screen" style={{background:'#f0f4ff'}}>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-[240px] flex-col fixed h-full z-20" style={{background:'linear-gradient(180deg,#1e1b4b 0%,#312e81 60%,#1e1b4b 100%)'}}>
+      <aside className="hidden lg:flex w-[240px] flex-col fixed h-full z-20"
+        style={{background:'linear-gradient(180deg,#1e1b4b 0%,#312e81 60%,#1e1b4b 100%)'}}>
         <NavContent />
       </aside>
 
@@ -83,7 +103,8 @@ export default function Layout() {
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-black/50" onClick={() => setMobileOpen(false)} />
-          <aside className="absolute left-0 top-0 h-full w-[260px] flex flex-col z-50" style={{background:'linear-gradient(180deg,#1e1b4b 0%,#312e81 60%,#1e1b4b 100%)'}}>
+          <aside className="absolute left-0 top-0 h-full w-[260px] flex flex-col z-50"
+            style={{background:'linear-gradient(180deg,#1e1b4b 0%,#312e81 60%,#1e1b4b 100%)'}}>
             <NavContent />
           </aside>
         </div>
@@ -92,7 +113,8 @@ export default function Layout() {
       {/* Main */}
       <main className="flex-1 lg:ml-[240px] min-h-screen flex flex-col">
         {/* Topbar */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-4 lg:px-8 py-3.5 border-b border-indigo-100/50" style={{background:'rgba(240,244,255,0.85)',backdropFilter:'blur(20px)'}}>
+        <div className="sticky top-0 z-10 flex items-center justify-between px-4 lg:px-8 py-3.5 border-b border-indigo-100/50"
+          style={{background:'rgba(240,244,255,0.85)',backdropFilter:'blur(20px)'}}>
           <button onClick={() => setMobileOpen(true)} className="lg:hidden w-9 h-9 rounded-xl bg-white border border-gray-200 flex items-center justify-center shadow-sm">
             <Menu className="w-4 h-4 text-gray-600" />
           </button>
