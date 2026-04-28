@@ -3,13 +3,21 @@ export default {
   theme: {
     extend: {
       fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-      boxShadow: {
-        'glow-teal': '0 0 30px rgba(13,148,136,0.25)',
-        'card-hover': '0 10px 25px rgba(0,0,0,0.08)',
+      colors: {
+        brand: { 50:'#eef2ff', 100:'#e0e7ff', 500:'#6366f1', 600:'#4f46e5', 700:'#4338ca' }
       },
       backgroundImage: {
-        'sidebar': 'linear-gradient(180deg, #0f172a 0%, #1a2744 100%)',
-        'mesh': 'radial-gradient(at 20% 20%, rgba(13,148,136,0.10) 0px, transparent 50%), radial-gradient(at 80% 80%, rgba(124,58,237,0.07) 0px, transparent 50%)',
+        'sidebar': 'linear-gradient(180deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%)',
+        'hero': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        'card-teal': 'linear-gradient(135deg, #0d9488, #059669)',
+        'card-purple': 'linear-gradient(135deg, #7c3aed, #6366f1)',
+        'card-blue': 'linear-gradient(135deg, #2563eb, #0891b2)',
+        'card-rose': 'linear-gradient(135deg, #e11d48, #f59e0b)',
+      },
+      boxShadow: {
+        'soft': '0 2px 15px rgba(99,102,241,0.08)',
+        'brand': '0 4px 20px rgba(99,102,241,0.25)',
+        'card': '0 2px 15px rgba(0,0,0,0.06)',
       }
     }
   },
