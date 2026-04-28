@@ -20,6 +20,7 @@ app.use('/api/demandes', require('./routes/demandes'));
 app.use('/api/rendezvous', require('./routes/rendezvous'));
 app.use('/api/recommandations', require('./routes/recommandations'));
 app.use('/api/users', require('./routes/users'));
+app.use('/api/ai', require('./routes/ai'));
 
 app.get('/', (req, res) => res.json({ message: 'MindCampus API running' }));
 
