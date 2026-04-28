@@ -9,9 +9,16 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ['etudiant', 'pair', 'professionnel', 'admin'], default: 'etudiant' },
   filiere: { type: String, default: '' },
   estAnonyme: { type: Boolean, default: true },
-  avatar: { type: String, default: '' },
   disponible: { type: Boolean, default: true },
   specialite: { type: String, default: '' },
+  // Vérification identité pour pair-aidants et professionnels
+  carteIdentite: { type: String, default: '' }, // URL ou base64 de la photo
+  estVerifie: { type: Boolean, default: false }, // validé par admin
+  statutVerification: { 
+    type: String, 
+    enum: ['non_soumis', 'en_attente', 'approuve', 'rejete'], 
+    default: 'non_soumis' 
+  },
   createdAt: { type: Date, default: Date.now }
 });
 
