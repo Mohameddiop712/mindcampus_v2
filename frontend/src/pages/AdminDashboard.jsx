@@ -243,12 +243,15 @@ export default function AdminDashboard() {
                     <UserCog className="w-3.5 h-3.5"/> Rôle <ChevronDown className="w-3 h-3"/>
                   </button>
                   {roleMenu===u._id && (
-                    <div className="absolute right-0 top-8 z-50 bg-white border border-gray-100 rounded-2xl shadow-xl p-1 min-w-[150px]">
+                    <div className="absolute right-0 bottom-10 z-[999] bg-white border border-gray-200 rounded-2xl shadow-2xl p-1 min-w-[160px]"
+                      style={{boxShadow:'0 10px 40px rgba(0,0,0,0.15)'}}>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-3 py-1.5">Changer le rôle</p>
                       {['etudiant','pair','professionnel','admin'].map(r => (
                         <button key={r} onClick={() => changerRole(u._id, r)}
-                          className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-left transition-colors ${u.role===r?'bg-indigo-50 text-indigo-700':'text-gray-600 hover:bg-gray-50'}`}>
-                          {roleEmoji[r]} {r}
-                          {u.role===r && <CheckCircle className="w-3 h-3 ml-auto text-indigo-500"/>}
+                          className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold text-left transition-colors ${u.role===r?'bg-indigo-50 text-indigo-700':'text-gray-600 hover:bg-gray-50'}`}>
+                          <span>{roleEmoji[r]}</span>
+                          <span className="capitalize">{r}</span>
+                          {u.role===r && <CheckCircle className="w-3.5 h-3.5 ml-auto text-indigo-500"/>}
                         </button>
                       ))}
                     </div>
