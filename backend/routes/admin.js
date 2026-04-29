@@ -83,3 +83,28 @@ router.get('/users/:id/carte', protect, authorize('admin'), async (req, res) => 
 })
 
 module.exports = router;
+
+// Changer le rôle d'un utilisateur
+router.put('/users/:id/role', protect, authorize('admin'), async (req, res) => {
+  try {
+    const { role } = req.body
+    if (!['etudiant', 'pair', 'professionnel', 'admin'].includes(role))
+      return res.status(400).json({ message: 'Rôle invalide' })
+    const user = await User.findByIdAndUpdate(
+      req.params.id, { role }, { new: true }
+    ).select('-motDePasse -carteIdentite')
+    res.json(user)
+  } catch (err) { res.status(500).json({ message: err.message }) }
+})
+
+// Activer/Désactiver un compte
+router.put('/users/:id/toggle', protect, authorize('admin'), async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+    if (!user) return res.status(404).json({ message: 'Introuvable' })
+    user.disponible = !user.disponible
+    await user.save()
+    const updated = await User.findById(req.params.id).select('-motDePasse -carteIdentite')
+    res.json(updated)
+  } catch (err) { res.status(500).json({ message: err.message }) }
+})
