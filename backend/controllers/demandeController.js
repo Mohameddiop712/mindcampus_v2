@@ -29,7 +29,7 @@ exports.getDemandesAssignees = async (req, res) => {
     const role = req.user.role;
     const type = role === 'pair' ? 'pair' : 'professionnel';
     const demandes = await DemandeAide.find({ type, statut: { $in: ['en_attente', 'acceptee', 'en_cours'] } })
-      .populate('etudiant', 'prenom filiere estAnonyme')
+      .populate('etudiant', 'filiere estAnonyme role')
       .sort({ createdAt: -1 });
     res.json(demandes);
   } catch (err) {
@@ -61,7 +61,7 @@ exports.envoyerMessage = async (req, res) => {
     await demande.save();
 
     const updated = await DemandeAide.findById(req.params.id)
-      .populate('messages.expediteur', 'nom prenom role');
+      .populate('messages.expediteur', 'prenom role');
     res.json(updated);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -82,9 +82,9 @@ exports.cloturerDemande = async (req, res) => {
 exports.getDemande = async (req, res) => {
   try {
     const demande = await DemandeAide.findById(req.params.id)
-      .populate('etudiant', 'prenom filiere estAnonyme')
+      .populate('etudiant', 'filiere estAnonyme role')
       .populate('assigneA', 'nom prenom specialite')
-      .populate('messages.expediteur', 'nom prenom role');
+      .populate('messages.expediteur', 'prenom role');
     if (!demande) return res.status(404).json({ message: 'Demande introuvable' });
     res.json(demande);
   } catch (err) {
